@@ -1,10 +1,45 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Camera, Search, ChevronDown } from 'lucide-react';
+import { Camera, Search, ChevronDown, Crosshair, ScanLine } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ImpactTicker } from './ImpactTicker';
-import { AntigravityField } from './AntigravityField';
-import { AuroraBackground } from './AuroraBackground';
+import Hyperspeed from '../Hyperspeed/Hyperspeed';
+import type { HyperspeedEffectOptions } from '../Hyperspeed/Hyperspeed';
+
+const HYPERSPEED_OPTIONS: HyperspeedEffectOptions = {
+  distortion: 'LongRaceDistortion',
+  length: 400,
+  roadWidth: 10,
+  islandWidth: 5,
+  lanesPerRoad: 2,
+  fov: 90,
+  fovSpeedUp: 150,
+  speedUp: 2,
+  totalSideLightSticks: 50,
+  lightPairsPerRoadWay: 70,
+  shoulderLinesWidthPercentage: 0.05,
+  brokenLinesWidthPercentage: 0.1,
+  brokenLinesLengthPercentage: 0.5,
+  lightStickWidth: [0.12, 0.5],
+  lightStickHeight: [1.3, 1.7],
+  movingAwaySpeed: [60, 80],
+  movingCloserSpeed: [-120, -160],
+  carLightsLength: [20, 60],
+  carLightsRadius: [0.05, 0.14],
+  carWidthPercentage: [0.3, 0.5],
+  carShiftX: [-0.2, 0.2],
+  carFloorSeparation: [0.05, 1],
+  colors: {
+    roadColor: 0x080808,
+    islandColor: 0x0a0a0a,
+    background: 0x000000,
+    shoulderLines: 0x131318,
+    brokenLines: 0x131318,
+    leftCars: [0xff5f73, 0xe74d60, 0xff102a],
+    rightCars: [0xa4e3e6, 0x80d1d4, 0x53c2c6],
+    sticks: 0xa4e3e6,
+  },
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FADE_UP: any = {
@@ -22,12 +57,11 @@ export function HeroSection() {
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-16"
       aria-label="Hero: CampusCycle AI"
     >
-      {/* Layered atmosphere gives the hero depth without competing with the CTA. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <AuroraBackground />
-        {/* Grid pattern */}
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        <Hyperspeed effectOptions={HYPERSPEED_OPTIONS} />
+        <div className="pointer-events-none absolute inset-0 bg-slate-950/35" />
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
@@ -35,16 +69,15 @@ export function HeroSection() {
           }}
         />
       </div>
-      <AntigravityField />
 
-      <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
+      <div className="pointer-events-none relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
         {/* Eyebrow */}
         <motion.div
           custom={0}
           variants={FADE_UP}
           initial="hidden"
           animate="visible"
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-4 py-1.5 text-xs font-semibold text-teal-400"
+          className="pointer-events-auto mb-6 inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-4 py-1.5 text-xs font-semibold text-teal-400"
         >
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-400" aria-hidden="true" />
           Powered by AWS Bedrock · Campus Sustainability AI
@@ -84,7 +117,7 @@ export function HeroSection() {
           variants={FADE_UP}
           initial="hidden"
           animate="visible"
-          className="flex flex-wrap items-center justify-center gap-3"
+          className="pointer-events-auto flex flex-wrap items-center justify-center gap-3"
         >
           {/* Primary CTA — pulses */}
           <motion.div
@@ -119,48 +152,52 @@ export function HeroSection() {
           </Link>
         </motion.div>
 
-        {/* Phone mockup */}
+        {/* Camera HUD merged with the moving road */}
         <motion.div
           custom={4}
           variants={FADE_UP}
           initial="hidden"
           animate="visible"
-          className="mt-16 flex justify-center"
+          className="mt-14 flex justify-center"
         >
           <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative"
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative w-[min(88vw,420px)]"
             aria-hidden="true"
           >
-            {/* Phone shell */}
-            <div className="relative h-[420px] w-[200px] rounded-[36px] border-2 border-slate-600 bg-slate-800 shadow-2xl shadow-black/60">
-              <div className="absolute inset-x-0 top-0 flex justify-center pt-3">
-                <div className="h-1.5 w-16 rounded-full bg-slate-700" />
-              </div>
-              {/* Screen content */}
-              <div className="absolute inset-x-[3px] top-8 bottom-3 overflow-hidden rounded-[30px] bg-slate-900">
-                {/* Camera viewfinder */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-                  <div className="mb-3 h-24 w-24 rounded-2xl border-2 border-dashed border-teal-400/60 bg-teal-500/5 flex items-center justify-center">
-                    <Camera className="h-10 w-10 text-teal-400/60" />
-                  </div>
-                  <p className="text-[10px] text-slate-500">Point at an item</p>
-                  {/* Scan line animation */}
-                  <motion.div
-                    className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-teal-400/70 to-transparent"
-                    animate={{ top: ['30%', '70%', '30%'] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                  />
+            <div className="relative h-[190px] overflow-hidden rounded-[26px] border border-teal-200/30 bg-slate-950/35 p-2 shadow-[0_0_55px_rgba(45,212,191,0.16)] backdrop-blur-[2px]">
+              <div className="relative h-full overflow-hidden rounded-[19px] border border-white/10">
+                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-transparent to-slate-950/55" />
+                <div className="absolute left-4 top-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-teal-200">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-teal-300 shadow-[0_0_10px_rgba(45,212,191,0.9)]" />
+                  Camera ready
                 </div>
-                {/* Bottom bar */}
-                <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-3 pt-2 bg-slate-900/80">
-                  <div className="h-8 w-8 rounded-full border-2 border-teal-400 bg-teal-500/20" />
+                <div className="absolute right-4 top-4 flex items-center gap-1.5 text-[10px] text-slate-300">
+                  <Crosshair className="h-3.5 w-3.5 text-teal-300" />
+                  Hold to accelerate
+                </div>
+
+                {/* Transparent scan reticle lets the Hyperspeed road remain the subject. */}
+                <div className="absolute inset-x-14 inset-y-9 border border-dashed border-teal-200/30">
+                  <span className="absolute -left-px -top-px h-7 w-7 border-l-2 border-t-2 border-teal-200" />
+                  <span className="absolute -right-px -top-px h-7 w-7 border-r-2 border-t-2 border-teal-200" />
+                  <span className="absolute -bottom-px -left-px h-7 w-7 border-b-2 border-l-2 border-teal-200" />
+                  <span className="absolute -bottom-px -right-px h-7 w-7 border-b-2 border-r-2 border-teal-200" />
+                  <ScanLine className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 text-teal-100/70" strokeWidth={0.8} />
+                </div>
+                <motion.div
+                  className="absolute left-14 right-14 h-px bg-gradient-to-r from-transparent via-teal-200 to-transparent shadow-[0_0_14px_rgba(45,212,191,0.9)]"
+                  animate={{ top: ['28%', '72%', '28%'] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+                />
+
+                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[10px]">
+                  <span className="text-slate-300">Point at an item to begin</span>
+                  <span className="flex items-center gap-1.5 text-teal-200"><Camera className="h-3.5 w-3.5" /> AI scan</span>
                 </div>
               </div>
             </div>
-            {/* Glow */}
-            <div className="absolute -inset-4 -z-10 rounded-[50px] bg-teal-500/10 blur-2xl" />
           </motion.div>
         </motion.div>
 
