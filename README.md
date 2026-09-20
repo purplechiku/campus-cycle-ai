@@ -1,32 +1,53 @@
-# React + TypeScript + Vite
+# CampusCycle AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+CampusCycle AI turns discarded campus items into reusable resources. Students can scan an item, receive AI-assisted triage, and match it with nearby campus demand.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Image-based item analysis with mock results for local demos
+- Reuse, repair, recycle, disposal, and manual-review recommendations
+- Campus demand matching with compatibility scores
+- Pairing confirmation with confetti feedback
+- 3D hover tilt on match cards
+- Crimson safety warning and glitch treatment for hazardous results
+- Scroll-driven journey, aurora atmosphere, and process film strip
+- Admin impact dashboard and AWS reference architecture preview
 
-## React Compiler
+## Run Locally
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Requirements: Node.js 20.19 or newer.
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```powershell
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Open the local URL printed by Vite, usually `http://localhost:5173`.
+
+## Demo Scan Results
+
+When no API endpoint is configured, the app selects a mock result from the uploaded filename:
+
+| Filename contains | Result |
+| --- | --- |
+| `hazard`, `chemical`, or `unknown` | Manual review safety warning |
+| `cable`, `hdmi`, or `wire` | Reusable HDMI cable with a campus match |
+| Anything else | Repairable table fan with campus matches |
+
+## Commands
+
+```powershell
+npm run dev       # Start the development server
+npm run build     # Type-check and create a production build
+npm run preview   # Preview the production build
+npm run lint      # Run Oxlint
+```
+
+## API Configuration
+
+Set `VITE_API_BASE_URL` to an API that exposes a `POST /analyze` endpoint. If it is not set, the app uses the local mock analyzer.
+
+```powershell
+$env:VITE_API_BASE_URL = "https://your-api.example.com"
+npm run dev
+```
